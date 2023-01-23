@@ -1,0 +1,651 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.3.3
+
+parameters:
+  # This parameter is used to trigger the main workflow
+  trigger:
+    type: boolean
+    default: true
+
+  back: # corresponds to the name of the package
+    type: boolean
+    default: false
+
+  front: # corresponds to the name of the package
+    type: boolean
+    default: false
+
+  run_deploy:
+    type: boolean
+    default: false
+
+  image_tag:
+    type: string
+    default: ""
+
+  e2e:
+    type: boolean
+    default: false
+
+executors:
+  cl2-back-essential-executor:
+    parameters:
+      image-tag:
+        type: string
+    docker:
+      - image: citizenlabdotco/back-essential:<< parameters.image-tag >>
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST: localhost
+      - image: "postgis/postgis:12-3.1"
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+  cl2-back:
+    parameters:
+      image-tag:
+        type: string
+    docker:
+      - image: citizenlabdotco/back-ee:<< parameters.image-tag >>
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST: localhost
+      - image: "postgis/postgis:12-3.1"
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+commands:
+  wait-for-postgres:
+    steps:
+      - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgres && exit 1
+
+  echo_pipeline_parameters:
+    steps:
+      - run: |
+          echo "trigger: << pipeline.parameters.trigger >>"
+          echo "back: << pipeline.parameters.back >>"
+          echo "front: << pipeline.parameters.front >>"
+          echo "run_deploy: << pipeline.parameters.run_deploy >>"
+          echo "image_tag: << pipeline.parameters.image_tag >>"
+
+  copy_secrets_from_lastpass:
+    steps:
+      - run: |
+          if command -v sudo &> /dev/null
+          then
+            sudo apt-get update && sudo apt-get install -y lastpass-cli
+          else
+            apt-get update && apt-get install -y lastpass-cli
+          fi
+      - run: echo $LASTPASS_PASSWORD | LPASS_DISABLE_PINENTRY=1 lpass login ${LASTPASS_EMAIL}
+      - run: lpass show --notes 'citizenlab back-secret.env' > env_files/back-secret.env
+      - run: lpass show --notes 'citizenlab front-secret.env' > env_files/front-secret.env
+
+jobs:
+  trigger-workflows:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Trigger workflows
+          command: chmod +x .circleci/monorepo.sh && .circleci/monorepo.sh
+
+  danger-check:
+    resource_class: small
+    docker:
+      - image: ghcr.io/danger/danger-js:10.6.6
+    steps:
+      - checkout
+      - run: danger ci
+
+  # BACK-END ESSENTIAL
+  back-build-essential-docker-image:
+    working_directory: /citizenlab
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout:
+          path: /citizenlab
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run: |
+          docker build -t citizenlabdotco/back-essential:$CIRCLE_SHA1 -f back/Dockerfile .
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push citizenlabdotco/back-essential:$CIRCLE_SHA1
+
+  back-bundle-audit:
+    resource_class: small
+    executor:
+      name: cl2-back-essential-executor
+      image-tag: $CIRCLE_SHA1
+    working_directory: /cl2_back
+    environment:
+      RAILS_ENV: development
+    steps:
+      # CVE-2015-9284 is "CSRF vulnerability in OmniAuth's request phase"
+      # Solution: upgrade to '>= 2.0.0'
+      # But we can't, due to unmaintained gems that don't work with Omniauth 2.0.
+      # See https://github.com/rubysec/bundler-audit
+      - run: bundle exec bundle-audit check --update --ignore CVE-2015-9284
+
+  back-test:
+    resource_class: small
+    executor:
+      name: cl2-back-essential-executor
+      image-tag: $CIRCLE_SHA1
+    working_directory: /cl2_back
+    parallelism: 4
+    environment:
+      RAILS_ENV: test
+      COVERAGE: ON
+    steps:
+      - wait-for-postgres
+      - run: |
+          rake db:create
+          rake db:schema:load
+      - run: |
+          TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" "engines/free/*/spec/**/*_spec.rb" | circleci tests split  --split-by=timings)
+          echo $TESTFILES
+          bundle exec rspec --format documentation --profile --format RspecJunitFormatter -o spec/reports/rspec.xml -- ${TESTFILES}
+      - store_test_results:
+          path: spec/reports
+
+  back-license-check:
+    resource_class: small
+    executor:
+      name: cl2-back-essential-executor
+      image-tag: $CIRCLE_SHA1
+    working_directory: /cl2_back
+    steps:
+      - run: bundle exec license_finder
+
+  back-web-api-docs:
+    resource_class: small
+    executor:
+      name: cl2-back-essential-executor
+      image-tag: $CIRCLE_SHA1
+    working_directory: /cl2_back
+    environment:
+      RAILS_ENV: test
+    steps:
+      - wait-for-postgres
+      - run: |
+          rake db:create
+          rake db:schema:load
+      - run: bundle exec rake web_api:docs:generate
+      - run: apt-get -y install awscli
+      - run: aws s3 sync doc/api s3://developers.citizenlab.co/api-docs/essential/frontweb_api/$CIRCLE_BRANCH --delete --acl public-read
+
+  back-release-essential-image:
+    resource_class: small
+    docker:
+      - image: cimg/base:2021.03
+    steps:
+      - setup_remote_docker
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker pull citizenlabdotco/back-essential:$CIRCLE_SHA1
+      - run: docker tag citizenlabdotco/back-essential:$CIRCLE_SHA1 citizenlabdotco/back-essential
+      - deploy:
+          command: docker push citizenlabdotco/back-essential
+
+  back-lint:
+    resource_class: medium
+    executor:
+      name: cl2-back-essential-executor
+      image-tag: $CIRCLE_SHA1
+    working_directory: /cl2_back
+    environment:
+      RAILS_ENV: development
+    steps:
+      - run: bundle exec rubocop -P --format simple
+
+  # FRONT-END ESSENTIAL
+  front-test:
+    docker:
+      - image: citizenlabdotco/cl2-devops-front-buildenv
+    working_directory: /citizenlab/front
+    steps:
+      - checkout:
+          path: /citizenlab
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-npm-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-cache-
+      - run: npm ci
+      - save_cache:
+          paths:
+            - /root/.npm
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run:
+          name: Run tests with JUnit as reporter
+          command: npm run test:ci
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./reports/
+      - store_test_results:
+          path: ./reports/
+      - store_artifacts:
+          path: ./reports/
+
+  front-detect-deadcode:
+    docker:
+      - image: citizenlabdotco/cl2-devops-front-buildenv
+    working_directory: /citizenlab/front
+    steps:
+      - checkout:
+          path: /citizenlab
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-npm-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-cache-
+      - run: npm ci
+      - save_cache:
+          paths:
+            - /root/.npm
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run: npm run detect-deadcode
+
+  front-lint:
+    docker:
+      - image: citizenlabdotco/cl2-devops-front-buildenv
+    working_directory: /citizenlab/front
+    steps:
+      - checkout:
+          path: /citizenlab
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-npm-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-cache-
+      - run: npm ci
+      - save_cache:
+          paths:
+            - /root/.npm
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run: npm run lint
+
+  front-license-check:
+    docker:
+      - image: licensefinder/license_finder
+    working_directory: /citizenlab/front
+    resource_class: small
+    steps:
+      - checkout:
+          path: /citizenlab
+      - restore_cache:
+          keys:
+            - v1-npm-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-cache-
+      - run: npm ci
+      - run: /bin/bash -lc "cd /citizenlab/front && license_finder"
+
+  front-build:
+    docker:
+      - image: citizenlabdotco/cl2-devops-front-buildenv
+    resource_class: large
+    working_directory: /citizenlab/front
+    steps:
+      - checkout:
+          path: /citizenlab
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-npm-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-cache-
+      - run: npm ci
+      - save_cache:
+          paths:
+            - /root/.npm
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run:
+          command: TEST_BUILD="true" npm run build
+          no_output_timeout: "30m"
+
+  front-extract-intl:
+    docker:
+      - image: citizenlabdotco/cl2-devops-front-buildenv
+    working_directory: /citizenlab/front
+    steps:
+      - checkout:
+          path: /citizenlab
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-npm-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-cache-
+      - run: npm ci
+      - save_cache:
+          paths:
+            - /root/.npm
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run: npm run extract-intl
+      - run: git add app/translations/*.json
+      - run: git add app/translations/admin/*.json
+      - run: git config --global user.email "hello@citizenlab.co"
+      - run: git config --global user.name "CircleCI"
+      - add_ssh_keys:
+          fingerprints:
+            - "b8:7b:38:ee:7d:8c:8c:e0:84:74:88:b6:98:2d:0f:f6"
+      - run: git diff --quiet app/translations && git diff --staged --quiet app/translations || git commit -m "Translations updated by CI (extract-intl)"
+      - run: git push origin $CIRCLE_BRANCH
+
+  front-release-essential-image:
+    docker:
+      - image: cimg/base:2021.03
+    steps:
+      - checkout
+      - setup_remote_docker:
+          # https://support.circleci.com/hc/en-us/articles/360050934711
+          version: 19.03.13
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: |
+          docker build -t citizenlabdotco/front-essential -f front/Dockerfile .
+      - deploy:
+          command: docker push citizenlabdotco/front-essential
+
+  # E2E TESTS
+  e2e-tests:
+    docker:
+      - image: cimg/base:2021.03
+    resource_class: medium+
+    steps:
+      - checkout
+      - copy_secrets_from_lastpass
+      - setup_remote_docker:
+          version: 19.03.13 # https://support.circleci.com/hc/en-us/articles/360050934711
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: |
+          cd e2e
+          docker-compose build
+          docker-compose run web bin/rails db:reset
+      - run:
+          command: |
+            cd e2e
+            docker-compose up
+          background: true
+      # Wait until build is finished. TODO: Use prebuilt images.
+      - run: sleep 280
+      - run: |
+          cd e2e
+          docker-compose run --name cypress_run front npm run cypress:run -- --config baseUrl=http://e2e.front:3000
+      - run:
+          command: docker cp cypress_run:/front/cypress/screenshots .
+          # If `when: always`, it fails on success with
+          # Error: No such container:path: cypress_run:/front/cypress/screenshots
+          when: on_fail
+      - store_artifacts:
+          path: screenshots
+
+workflows:
+  version: 2
+
+  ci:
+    when: << pipeline.parameters.trigger >>
+    jobs:
+      - trigger-workflows:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+
+  global-checks:
+    when: << pipeline.parameters.trigger >>
+    jobs:
+      - danger-check:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+                - master
+                - production
+
+  # BACK-END ESSENTIAL
+  back-essential:
+    when:
+      and:
+        - not: <<pipeline.parameters.run_deploy>>
+        - << pipeline.parameters.back >>
+    jobs:
+      - back-build-essential-docker-image:
+          context: docker-hub-access
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+      - back-lint:
+          context: docker-hub-access
+          requires:
+            - back-build-essential-docker-image
+      - back-bundle-audit:
+          context: docker-hub-access
+          requires:
+            - back-build-essential-docker-image
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+      - back-test:
+          context: docker-hub-access
+          requires:
+            - back-build-essential-docker-image
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+      - back-license-check:
+          context: docker-hub-access
+          requires:
+            - back-build-essential-docker-image
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+      - back-web-api-docs:
+          context: docker-hub-access
+          requires:
+            - back-test
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+
+  # FRONT-END ESSENTIAL
+  front-essential:
+    when:
+      and:
+        - not: <<pipeline.parameters.run_deploy>>
+        - << pipeline.parameters.front >>
+    jobs:
+      - front-test:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+                - master
+      - front-lint:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+                - master
+      - front-detect-deadcode:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+                - master
+      - front-license-check:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+      - front-build:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+                - master
+      - front-extract-intl:
+          filters:
+            branches:
+              ignore:
+                - crowdin_master
+                - /l10n_.*/
+                - master
+                - production
+
+  # RELEASE ESSENTIAL
+  release-essential:
+    when: << pipeline.parameters.trigger >>
+    jobs:
+      - front-test:
+          filters:
+            branches:
+              only:
+                - production
+      - front-detect-deadcode:
+          filters:
+            branches:
+              only:
+                - production
+      - front-lint:
+          filters:
+            branches:
+              only:
+                - production
+      - front-license-check:
+          filters:
+            branches:
+              only:
+                - production
+      - front-build:
+          filters:
+            branches:
+              only:
+                - production
+      - back-build-essential-docker-image:
+          context: docker-hub-access
+          filters:
+            branches:
+              only:
+                - production
+      - back-test:
+          context: docker-hub-access
+          requires:
+            - back-build-essential-docker-image
+          filters:
+            branches:
+              only:
+                - production
+      - back-license-check:
+          context: docker-hub-access
+          requires:
+            - back-build-essential-docker-image
+          filters:
+            branches:
+              only:
+                - production
+      - front-release-essential-image:
+          context: docker-hub-access
+          requires:
+            - front-test
+            - front-license-check
+            - front-build
+            - front-detect-deadcode
+            - front-lint
+            - back-test
+            - back-license-check
+          filters:
+            branches:
+              only:
+                - production
+      - back-release-essential-image:
+          context: docker-hub-access
+          requires:
+            - front-test
+            - front-license-check
+            - front-build
+            - front-detect-deadcode
+            - front-lint
+            - back-test
+            - back-license-check
+          filters:
+            branches:
+              only:
+                - production
+
+  # OTHER
+  manually-e2e-tests:
+    when: << pipeline.parameters.e2e >>
+    jobs:
+      - e2e-tests:
+          context:
+            - docker-hub-access
+            - lastpass
+
+  nightly-e2e-tests:
+    triggers:
+      - schedule:
+          cron: "0 2,14 * * 1-5" # https://crontab.guru/
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - e2e-tests:
+          context:
+            - docker-hub-access
+            - slack-dev-notifications-e2e
+            - lastpass
+          post-steps:
+            - slack/notify:
+                event: pass
+                template: basic_success_1
+            - slack/notify:
+                event: fail
+                mentions: ":boom: FAILURE: Some tests failed."
+                template: basic_fail_1

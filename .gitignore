@@ -1,0 +1,12 @@
+back-secret.env
+front-secret.env
+.envrc
+
+# Legacy .env filenames
+.env-back
+.env-front
+
+back/engines/ee
+node_modules
+
+*.DS_Store

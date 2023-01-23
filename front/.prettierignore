@@ -1,0 +1,11 @@
+app/assets/
+app/translations/
+docs
+package.json
+package-lock.json
+.cache-loader
+.out
+.github
+.vscode
+custom.d.ts
+.circleci

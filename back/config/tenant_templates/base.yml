@@ -1,0 +1,422 @@
+models:
+  home_page:
+    - {}
+  idea_status:
+    -
+      title_multiloc: idea_statuses.proposed
+      ordering: 100
+      code: proposed
+      color: '#687782'
+      description_multiloc: idea_statuses.proposed_description
+    -
+      title_multiloc: idea_statuses.viewed
+      ordering: 150
+      code: viewed
+      color: '#01A1B1'
+      description_multiloc: idea_statuses.viewed_description
+    -
+      title_multiloc: idea_statuses.under_consideration
+      ordering: 200
+      code: under_consideration
+      color: '#0080A5'
+      description_multiloc: idea_statuses.under_consideration_description
+    -
+      title_multiloc: idea_statuses.accepted
+      ordering: 300
+      code: accepted
+      color: '#04884C'
+      description_multiloc: idea_statuses.accepted_description
+    -
+      title_multiloc: idea_statuses.rejected
+      ordering: 400
+      code: rejected
+      color: '#E52516'
+      description_multiloc: idea_statuses.rejected_description
+    -
+      title_multiloc: idea_statuses.implemented
+      ordering: 500
+      code: implemented
+      color: '#04884C'
+      description_multiloc: idea_statuses.implemented_description
+  initiative_status:
+    -
+      title_multiloc: initiative_statuses.proposed
+      ordering: 100
+      code: proposed
+      color: '#687782'
+      description_multiloc: initiative_statuses.proposed_description
+    -
+      title_multiloc: initiative_statuses.expired
+      ordering: 200
+      code: expired
+      color: '#01A1B1'
+      description_multiloc: initiative_statuses.expired_description
+    -
+      title_multiloc: initiative_statuses.threshold_reached
+      ordering: 300
+      code: threshold_reached
+      color: '#04884C'
+      description_multiloc: initiative_statuses.threshold_reached_description
+    -
+      title_multiloc: initiative_statuses.answered
+      ordering: 500
+      code: answered
+      color: '#04884C'
+      description_multiloc: initiative_statuses.answered_description
+    -
+      title_multiloc: initiative_statuses.ineligible
+      ordering: 400
+      code: ineligible
+      color: '#E52516'
+      description_multiloc: initiative_statuses.ineligible_description
+  topic:
+    - &topic-nature
+      title_multiloc: topics.nature
+      description_multiloc: topics.nature_description
+      code: nature
+      ordering: 0
+    - &topic-waste
+      title_multiloc: topics.waste
+      description_multiloc: topics.waste_description
+      code: waste
+      ordering: 1
+    - &topic-sustainability
+      title_multiloc: topics.sustainability
+      description_multiloc: topics.sustainability_description
+      code: sustainability
+      ordering: 2
+    - &topic-mobility
+      title_multiloc: topics.mobility
+      description_multiloc: topics.mobility_description
+      code: mobility
+      ordering: 3
+    - &topic-technology
+      title_multiloc: topics.technology
+      description_multiloc: topics.technology_description
+      code: technology
+      ordering: 4
+    - &topic-economy
+      title_multiloc: topics.economy
+      description_multiloc: topics.economy_description
+      code: economy
+      ordering: 5
+    - &topic-housing
+      title_multiloc: topics.housing
+      description_multiloc: topics.housing_description
+      code: housing
+      ordering: 6
+    - &topic-public_space
+      title_multiloc: topics.public_space
+      description_multiloc: topics.public_space_description
+      code: public_space
+      ordering: 7
+    - &topic-safety
+      title_multiloc: topics.safety
+      description_multiloc: topics.safety_description
+      code: safety
+      ordering: 8
+    - &topic-education
+      title_multiloc: topics.education
+      description_multiloc: topics.education_description
+      code: education
+      ordering: 9
+    - &topic-culture
+      title_multiloc: topics.culture
+      description_multiloc: topics.culture_description
+      code: culture
+      ordering: 10
+    - &topic-health
+      title_multiloc: topics.health
+      description_multiloc: topics.health_description
+      code: health
+      ordering: 11
+    - &topic-inclusion
+      title_multiloc: topics.inclusion
+      description_multiloc: topics.inclusion_description
+      code: inclusion
+      ordering: 12
+    - &topic-community
+      title_multiloc: topics.community
+      description_multiloc: topics.community_description
+      code: community
+      ordering: 13
+    - &topic-services
+      title_multiloc: topics.services
+      description_multiloc: topics.services_description
+      code: services
+      ordering: 14
+    - &topic-other
+      title_multiloc: topics.other
+      description_multiloc: topics.other_description
+      code: other
+      ordering: 15
+  static_page:
+    - &information-page
+      code: about
+      slug: information
+      title_multiloc: static_pages.infopage_title
+      top_info_section_multiloc: static_pages.infopage_body
+      top_info_section_enabled: true
+      files_section_enabled: true
+      text_images_attributes:
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: e2c7bc7a-017d-4887-a3cb-b94185617a59
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: 392d0e47-e5f9-41ab-9ceb-affac617b8b1
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: 7b81cbc6-1e22-4511-b96d-867392471bcb
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: 02896ca6-6155-4829-8aee-0d1a65fa6193
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: dc653d9c-6b69-4f90-b337-25718eb5c250
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: 45163616-fc6f-45b1-a5ca-183db79f86d3
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: 27345c70-4967-48e6-a6ba-430dde6eeffb
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/horizontal_line_grey.png
+          text_reference: 4d291006-0414-4f93-903b-fb911a00d510
+    - &privacy-policy-page
+      code: privacy-policy
+      title_multiloc: static_pages.privacy_policy_title
+      top_info_section_multiloc: static_pages.privacy_policy_body
+      top_info_section_enabled: true
+      slug: privacy-policy
+    - &terms-and-conditions-page
+      code: terms-and-conditions
+      title_multiloc: static_pages.terms_and_conditions_title
+      top_info_section_multiloc: static_pages.terms_and_conditions_body
+      top_info_section_enabled: true
+      slug: terms-and-conditions
+    - &faq-page
+      code: faq
+      slug: faq
+      title_multiloc: static_pages.faq_title
+      top_info_section_multiloc: static_pages.faq_body
+      top_info_section_enabled: true
+      files_section_enabled: true
+    - &initiatives-page
+      code: proposals
+      title_multiloc: static_pages.initiatives_title
+      top_info_section_multiloc: static_pages.initiatives_body
+      top_info_section_enabled: true
+      files_section_enabled: true
+      slug: initiatives
+      text_images_attributes:
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: 493c1992-608d-4666-90f0-20d38071353d
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: d5917ff6-985c-479b-bfb5-4b9d424f0933
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: b4e659ab-2830-48fd-b3ce-96e16856262f
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: 43f82d75-2aa1-41ab-8c45-9c8ba9dff49f
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: ba16670d-e551-46af-8ba4-51250fb97439
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: b4974fd9-7681-4acd-951b-a3979ffc55b0
+        - imageable_field: top_info_section_multiloc
+          remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_in_meeting_graphic.png
+          text_reference: 85a9e561-4c27-4f6b-949a-d8e06905787b
+  nav_bar_item:
+    -
+      code: home
+      ordering: 0
+    -
+      code: projects
+      ordering: 1
+    -
+      code: all_input
+      ordering: 2
+    -
+      code: proposals
+      ordering: 3
+    -
+      code: events
+      ordering: 4
+    -
+      code: custom
+      ordering: 5
+      static_page_ref: *information-page
+    -
+      code: custom
+      ordering: 6
+      static_page_ref: *faq-page
+  project:
+    - &open_idea_project
+      title_multiloc: projects.open_idea_project_title
+      description_multiloc: projects.open_idea_project_description
+      description_preview_multiloc: projects.open_idea_project_description_preview
+      internal_role: open_idea_box
+      presentation_mode: card
+      process_type: continuous
+      participation_method: ideation
+      posting_enabled: true
+      commenting_enabled: true
+      voting_enabled: true
+      upvoting_method: unlimited
+      remote_header_bg_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/people_with_speech_bubbles.jpeg
+  project_image:
+    - remote_image_url: https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/brainstorming_graphic.png
+      project_ref: *open_idea_project
+  projects_allowed_input_topic:
+    - project_ref: *open_idea_project
+      topic_ref: *topic-nature
+      ordering: 0
+    - project_ref: *open_idea_project
+      topic_ref: *topic-waste
+      ordering: 1
+    - project_ref: *open_idea_project
+      topic_ref: *topic-sustainability
+      ordering: 2
+    - project_ref: *open_idea_project
+      topic_ref: *topic-mobility
+      ordering: 3
+    - project_ref: *open_idea_project
+      topic_ref: *topic-technology
+      ordering: 4
+    - project_ref: *open_idea_project
+      topic_ref: *topic-economy
+      ordering: 5
+    - project_ref: *open_idea_project
+      topic_ref: *topic-housing
+      ordering: 6
+    - project_ref: *open_idea_project
+      topic_ref: *topic-public_space
+      ordering: 7
+    - project_ref: *open_idea_project
+      topic_ref: *topic-safety
+      ordering: 8
+    - project_ref: *open_idea_project
+      topic_ref: *topic-education
+      ordering: 9
+    - project_ref: *open_idea_project
+      topic_ref: *topic-culture
+      ordering: 10
+    - project_ref: *open_idea_project
+      topic_ref: *topic-health
+      ordering: 11
+    - project_ref: *open_idea_project
+      topic_ref: *topic-inclusion
+      ordering: 12
+    - project_ref: *open_idea_project
+      topic_ref: *topic-community
+      ordering: 13
+    - project_ref: *open_idea_project
+      topic_ref: *topic-services
+      ordering: 14
+    - project_ref: *open_idea_project
+      topic_ref: *topic-other
+      ordering: 15
+  event:
+    - project_ref: *open_idea_project
+      title_multiloc: events.council_meeting_title
+      description_multiloc: events.council_meeting_description
+      start_at: 2019-03-26T18:00:00.1Z
+      end_at: 2019-03-26T20:00:00.1Z
+    - project_ref: *open_idea_project
+      title_multiloc: events.council_meeting_title
+      description_multiloc: events.council_meeting_description
+      start_at: 2019-06-25T17:00:00.1Z
+      end_at: 2019-06-25T19:00:00.1Z
+    - project_ref: *open_idea_project
+      title_multiloc: events.council_meeting_title
+      description_multiloc: events.council_meeting_description
+      start_at: 2019-09-24T17:00:00.1Z
+      end_at: 2019-09-24T19:00:00.1Z
+    - project_ref: *open_idea_project
+      title_multiloc: events.council_meeting_title
+      description_multiloc: events.council_meeting_description
+      start_at: 2019-12-24T18:00:00.1Z
+      end_at: 2019-12-24T20:00:00.1Z
+  custom_field:
+    - &cfgender
+      resource_type: User
+      key: gender
+      title_multiloc: custom_fields.users.gender.title
+      input_type: select
+      required: false
+      ordering: 0
+      enabled: true
+      code: gender
+    - &cfbirthyear
+      resource_type: User
+      key: birthyear
+      title_multiloc: custom_fields.users.birthyear.title
+      input_type: number
+      required: false
+      ordering: 1
+      enabled: true
+      code: birthyear
+    - &cfdomicile
+      resource_type: User
+      key: domicile
+      title_multiloc: custom_fields.users.domicile.title
+      input_type: select
+      required: false
+      ordering: 2
+      enabled: true
+      code: domicile
+    - &cfeducation
+      resource_type: User
+      key: education
+      title_multiloc: custom_fields.users.education.title
+      input_type: select
+      required: false
+      ordering: 3
+      enabled: false
+      code: education
+  custom_field_option:
+    - custom_field_ref: *cfgender
+      key: male
+      title_multiloc: custom_field_options.gender.male
+      ordering: 0
+    - custom_field_ref: *cfgender
+      key: female
+      title_multiloc: custom_field_options.gender.female
+      ordering: 1
+    - custom_field_ref: *cfgender
+      key: unspecified
+      title_multiloc: custom_field_options.gender.unspecified
+      ordering: 2
+    - custom_field_ref: *cfeducation
+      key: "2"
+      title_multiloc: custom_field_options.education.ISCED2
+      ordering: 0
+    - custom_field_ref: *cfeducation
+      key: "3"
+      title_multiloc: custom_field_options.education.ISCED3
+      ordering: 1
+    - custom_field_ref: *cfeducation
+      key: "4"
+      title_multiloc: custom_field_options.education.ISCED4
+      ordering: 2
+    - custom_field_ref: *cfeducation
+      key: "5"
+      title_multiloc: custom_field_options.education.ISCED5
+      ordering: 3
+    - custom_field_ref: *cfeducation
+      key: "6"
+      title_multiloc: custom_field_options.education.ISCED6
+      ordering: 4
+    - custom_field_ref: *cfeducation
+      key: "7"
+      title_multiloc: custom_field_options.education.ISCED7
+      ordering: 5
+    - custom_field_ref: *cfeducation
+      key: "8"
+      title_multiloc: custom_field_options.education.ISCED8
+      ordering: 6
