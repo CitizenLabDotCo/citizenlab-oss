@@ -4,7 +4,7 @@
 # into the current app configuration.
 
 begin
-  unless Rails.env.test?
+  unless Rails.env.test? && ActiveRecord::Base.connection.table_exists?(AppConfiguration.table_name)
     config = AppConfiguration.instance
     settings = config.settings
 
