@@ -3,10 +3,10 @@
 # Reloads the CL_SETTING_* environment variables
 # into the current app configuration.
 
-return if Rails.env.test?
-return unless ActiveRecord::Base.connection.table_exists?(AppConfiguration.table_name)
-
 begin
+  return if Rails.env.test?
+  return unless ActiveRecord::Base.connection.table_exists?(AppConfiguration.table_name)
+
   config = AppConfiguration.instance
   settings = config.settings
 
