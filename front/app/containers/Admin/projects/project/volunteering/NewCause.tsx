@@ -6,7 +6,7 @@ import { addCause } from 'services/causes';
 
 // Components
 import { SectionTitle, SectionDescription } from 'components/admin/Section';
-import CauseForm, { FormValues } from './CauseForm';
+import CauseForm, { SubmitValues } from './CauseForm';
 
 // i18n
 import { FormattedMessage } from 'utils/cl-intl';
@@ -19,9 +19,8 @@ const NewCause = () => {
   const participationContextType = phaseId ? 'phase' : 'project';
   const participationContextId = phaseId || projectId;
 
-  const handleOnSubmit = async (formValues: FormValues) => {
+  const handleOnSubmit = async (formValues: SubmitValues) => {
     const { title_multiloc, description_multiloc, image } = formValues;
-
     if (title_multiloc && description_multiloc) {
       let PCType;
       switch (participationContextType) {
@@ -38,7 +37,7 @@ const NewCause = () => {
           title_multiloc,
           participation_context_type: PCType,
           participation_context_id: participationContextId,
-          image: image ? image[0]?.base64 : undefined,
+          image,
         });
         clHistory.push(`/admin/projects/${projectId}/volunteering`);
       } catch {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // typings
 import { Multiloc, UploadFile } from 'typings';
@@ -22,6 +22,7 @@ import { Box } from '@citizenlab/cl2-component-library';
 // intl
 import messages from './messages';
 import { useIntl } from 'utils/cl-intl';
+import { convertUrlToUploadFile } from 'utils/fileUtils';
 
 export interface FormValues {
   title_multiloc: Multiloc;
@@ -29,12 +30,19 @@ export interface FormValues {
   image?: UploadFile[] | null;
 }
 
+export interface SubmitValues {
+  title_multiloc: Multiloc;
+  description_multiloc: Multiloc;
+  image?: string | null;
+}
+
 type PageFormProps = {
-  onSubmit: (formValues: FormValues) => void | Promise<void>;
+  onSubmit: (formValues: SubmitValues) => void | Promise<void>;
   defaultValues?: FormValues;
+  imageUrl?: string | null;
 };
 
-const CauseForm = ({ onSubmit, defaultValues }: PageFormProps) => {
+const CauseForm = ({ onSubmit, defaultValues, imageUrl }: PageFormProps) => {
   const { formatMessage } = useIntl();
   const schema = object({
     title_multiloc: validateAtLeastOneLocale(
@@ -52,9 +60,22 @@ const CauseForm = ({ onSubmit, defaultValues }: PageFormProps) => {
     resolver: yupResolver(schema),
   });
 
+  // Load the API cause object as a local image
+  useEffect(() => {
+    if (imageUrl) {
+      (async () => {
+        const newImage = await convertUrlToUploadFile(imageUrl);
+        if (newImage) {
+          methods.setValue('image', [newImage]);
+        }
+      })();
+    }
+  }, [imageUrl, methods]);
+
   const onFormSubmit = async (formValues: FormValues) => {
     try {
-      await onSubmit(formValues);
+      const image = formValues.image ? formValues.image[0].base64 : null;
+      await onSubmit({ ...formValues, image });
     } catch (error) {
       handleHookFormSubmissionError(error, methods.setError);
     }
@@ -62,7 +83,10 @@ const CauseForm = ({ onSubmit, defaultValues }: PageFormProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onFormSubmit)}>
+      <form
+        onSubmit={methods.handleSubmit(onFormSubmit)}
+        data-testid="causeForm"
+      >
         <SectionField>
           <Feedback />
           <InputMultilocWithLocaleSwitcher
