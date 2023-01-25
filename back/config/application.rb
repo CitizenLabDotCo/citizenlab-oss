@@ -75,7 +75,7 @@ module Cl2Back
         user_name: ENV.fetch('SMTP_USER_NAME', nil),
         password: ENV.fetch('SMTP_PASSWORD', nil),
         authentication: ENV.fetch('SMTP_AUTHENTICATION', nil)&.to_sym,
-        enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', nil),
+        enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO']&.lower == 'true',
         openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil)
       }.compact
     end
