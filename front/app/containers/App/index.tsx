@@ -27,9 +27,6 @@ import { appLocalesMomentPairs, locales } from 'containers/App/constants';
 import { PreviousPathnameContext } from 'context';
 import { trackPage } from 'utils/analytics';
 
-// analytics
-const ConsentManager = lazy(() => import('components/ConsentManager'));
-
 // components
 import ErrorBoundary from 'components/ErrorBoundary';
 import ForbiddenRoute from 'components/routing/forbiddenRoute';
@@ -490,11 +487,6 @@ class App extends PureComponent<Props, State> {
                 </ErrorBoundary>
                 <ErrorBoundary>
                   <div id="topbar-portal" />
-                </ErrorBoundary>
-                <ErrorBoundary>
-                  <Suspense fallback={null}>
-                    <ConsentManager />
-                  </Suspense>
                 </ErrorBoundary>
                 <ErrorBoundary>
                   <MainHeader setRef={this.setNavbarRef} />
