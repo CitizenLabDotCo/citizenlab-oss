@@ -5,11 +5,11 @@ module CitizenLab
     module SettingsSpecification
       # @return [String]
       def json_schema_str
-        @json_schema_str ||= json_schema.to_json
+        json_schema.to_json
       end
 
       def json_schema
-        @json_schema ||= JSON.parse(json_schema_str)
+        JSON.parse(json_schema_str)
       end
     end
   end
