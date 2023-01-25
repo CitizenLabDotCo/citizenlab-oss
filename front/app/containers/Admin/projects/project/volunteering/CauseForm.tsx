@@ -52,8 +52,6 @@ const CauseForm = ({ onSubmit, defaultValues }: PageFormProps) => {
     resolver: yupResolver(schema),
   });
 
-  console.log(methods.getValues('image'));
-
   const onFormSubmit = async (formValues: FormValues) => {
     try {
       await onSubmit(formValues);
@@ -92,7 +90,6 @@ const CauseForm = ({ onSubmit, defaultValues }: PageFormProps) => {
             acceptedFileTypes={{
               'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
             }}
-            label={formatMessage(messages.causeImageLabel)}
             inputLabel={formatMessage(messages.causeImageLabel)}
           />
         </SectionField>
