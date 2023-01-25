@@ -127,7 +127,7 @@ describe('Idea show page actions', () => {
       beforeEach(() => {
         cy.setLoginCookie('admin@citizenlab.co', 'democracy2.0');
         cy.visit(`/ideas/${ideaTitle}`);
-        cy.acceptCookies();
+
         cy.get('#e2e-idea-show');
       });
 

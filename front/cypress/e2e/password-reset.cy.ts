@@ -10,7 +10,6 @@ const tryReset = (email: string) => {
 describe('profile deletion', () => {
   beforeEach(() => {
     cy.visit('/en/password-recovery');
-    cy.acceptCookies();
   });
   it("prints an error if the email doesn't exist", () => {
     tryReset(someEmail);
