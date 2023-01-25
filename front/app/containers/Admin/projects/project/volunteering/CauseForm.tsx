@@ -74,7 +74,9 @@ const CauseForm = ({ onSubmit, defaultValues, imageUrl }: PageFormProps) => {
 
   const onFormSubmit = async (formValues: FormValues) => {
     try {
-      const image = formValues.image ? formValues.image[0].base64 : null;
+      const image = formValues.image?.length
+        ? formValues.image[0].base64
+        : null;
       await onSubmit({ ...formValues, image });
     } catch (error) {
       handleHookFormSubmissionError(error, methods.setError);

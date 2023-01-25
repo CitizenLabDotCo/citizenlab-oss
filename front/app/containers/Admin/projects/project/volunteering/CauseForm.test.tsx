@@ -13,7 +13,6 @@ const defaultProps = {
   defaultValues: {
     title_multiloc: { en: '', 'nl-NL': '' },
     description_multiloc: { en: descriptionEN, 'nl-NL': descriptionNL },
-    image: null,
   },
 };
 
