@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash-es';
 
 // utils
 import Link from 'utils/cl-router/Link';
-import eventEmitter from 'utils/eventEmitter';
 
 // components
 import { Icon } from '@citizenlab/cl2-component-library';
@@ -103,22 +102,6 @@ const PagesNavListItem = styled.li`
   list-style: none;
   margin: 0;
   padding: 0;
-`;
-
-const StyledButton = styled.button`
-  color: ${colors.textSecondary};
-  font-size: ${fontSizes.s}px;
-  font-weight: 400;
-  line-height: normal;
-  hyphens: auto;
-  padding: 0;
-  margin: 0;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    color: #000;
-    text-decoration: underline;
-  }
 `;
 
 const linkStyle = css`
@@ -224,10 +207,6 @@ const PlatformFooter = ({
     name: 'custom_accessibility_statement_link',
   });
 
-  const openConsentManager = () => {
-    eventEmitter.emit('openConsentManager');
-  };
-
   const getHasCustomizedA11yFooterLink = () => {
     return (
       !isNilOrError(appConfiguration) &&
@@ -282,11 +261,6 @@ const PlatformFooter = ({
                 </React.Fragment>
               );
             })}
-            <PagesNavListItem>
-              <StyledButton onClick={openConsentManager}>
-                <FormattedMessage {...messages.cookieSettings} />
-              </StyledButton>
-            </PagesNavListItem>
             <PagesNavListItem>
               <StyledLink to="/site-map">
                 <FormattedMessage {...messages.siteMap} />

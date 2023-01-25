@@ -172,6 +172,18 @@ AppConfiguration.create!(
     idea_author_change: {
       allowed: true,
       enabled: true
+    },
+    project_folders: {
+      allowed: true,
+      enabled: true
+    },
+    project_visibility: {
+      allowed: true,
+      enabled: true
+    },
+    project_management: {
+      allowed: true,
+      enabled: true
     }
   })
 )
