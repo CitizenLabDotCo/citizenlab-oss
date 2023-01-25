@@ -486,6 +486,7 @@ end
     slug: 'information',
     title_multiloc: 'static_pages.infopage_title',
     top_info_section_multiloc: 'static_pages.infopage_body',
+    top_info_section_enabled: true,
     text_images_attributes: [
       {
         imageable_field: 'top_info_section_multiloc',
@@ -533,13 +534,15 @@ end
     code: 'privacy-policy',
     slug: 'privacy-policy',
     title_multiloc: 'static_pages.privacy_policy_title',
-    top_info_section_multiloc: 'static_pages.privacy_policy_body'
+    top_info_section_multiloc: 'static_pages.privacy_policy_body',
+    top_info_section_enabled: true,
   },
   {
     code: 'terms-and-conditions',
     slug: 'terms-and-conditions',
     title_multiloc: 'static_pages.terms_and_conditions_title',
-    top_info_section_multiloc: 'static_pages.terms_and_conditions_body'
+    top_info_section_multiloc: 'static_pages.terms_and_conditions_body',
+    top_info_section_enabled: true,
   },
   {
     code: 'proposals',
