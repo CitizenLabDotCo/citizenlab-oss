@@ -5,6 +5,7 @@ import { adopt } from 'react-adopt';
 import { withRouter, WithRouterProps } from 'utils/cl-router/withRouter';
 
 // Services
+import { isAdmin } from 'services/permissions/roles';
 
 // Utils
 import { isNilOrError } from 'utils/helperUtils';
@@ -24,6 +25,7 @@ import messages from './messages';
 import GetProjectFolder, {
   GetProjectFolderChildProps,
 } from 'resources/GetProjectFolder';
+import GetAuthUser, { GetAuthUserChildProps } from 'resources/GetAuthUser';
 
 // style
 import styled from 'styled-components';
@@ -45,63 +47,83 @@ export interface InputProps {}
 
 interface DataProps {
   projectFolder: GetProjectFolderChildProps;
+  authUser: GetAuthUserChildProps;
 }
 
 export interface Props extends InputProps, DataProps {}
 
 const AdminProjectFolderEdition = memo<
   Props & WrappedComponentProps & WithRouterProps
->(({ params: { projectFolderId }, intl: { formatMessage }, projectFolder }) => {
-  const localize = useLocalize();
-  const goBack = () => {
-    clHistory.push('/admin/projects');
-  };
+>(
+  ({
+    authUser,
+    params: { projectFolderId },
+    intl: { formatMessage },
+    projectFolder,
+  }) => {
+    const localize = useLocalize();
+    const goBack = () => {
+      clHistory.push('/admin/projects');
+    };
 
-  const tabbedProps = {
-    resource: {
-      title: !isNilOrError(projectFolder)
-        ? localize(projectFolder.attributes.title_multiloc)
-        : '',
-    },
-    tabs: [
-      {
-        label: formatMessage(messages.projectFolderProjectsTab),
-        url: `/admin/projects/folders/${projectFolderId}/projects`,
-        name: 'projects',
+    let tabbedProps = {
+      resource: {
+        title: !isNilOrError(projectFolder)
+          ? localize(projectFolder.attributes.title_multiloc)
+          : '',
       },
-      {
-        label: formatMessage(messages.projectFolderSettingsTab),
-        url: `/admin/projects/folders/${projectFolderId}/settings`,
-        name: 'settings',
-      },
-    ],
-  };
+      tabs: [
+        {
+          label: formatMessage(messages.projectFolderProjectsTab),
+          url: `/admin/projects/folders/${projectFolderId}/projects`,
+          name: 'projects',
+        },
+        {
+          label: formatMessage(messages.projectFolderSettingsTab),
+          url: `/admin/projects/folders/${projectFolderId}/settings`,
+          name: 'settings',
+        },
+      ],
+    };
 
-  return (
-    <>
-      <TopContainer>
-        <GoBackButton onClick={goBack} />
-        {!isNilOrError(projectFolder) && (
-          <Button
-            buttonStyle="cl-blue"
-            icon="eye"
-            id="to-projectFolder"
-            linkTo={`/folders/${projectFolder.attributes.slug}`}
-          >
-            <FormattedMessage {...messages.viewPublicProjectFolder} />
-          </Button>
-        )}
-      </TopContainer>
-      <TabbedResource {...tabbedProps}>
-        <RouterOutlet />
-      </TabbedResource>
-    </>
-  );
-});
+    if (authUser && isAdmin({ data: authUser })) {
+      tabbedProps = {
+        ...tabbedProps,
+        tabs: tabbedProps.tabs.concat({
+          label: formatMessage(messages.projectFolderPermissionsTab),
+          url: `/admin/projects/folders/${projectFolderId}/permissions`,
+          name: 'permissions',
+        }),
+      };
+    }
+
+    return (
+      <>
+        <TopContainer>
+          <GoBackButton onClick={goBack} />
+          {!isNilOrError(projectFolder) && (
+            <Button
+              buttonStyle="cl-blue"
+              icon="eye"
+              id="to-projectFolder"
+              linkTo={`/folders/${projectFolder.attributes.slug}`}
+            >
+              <FormattedMessage {...messages.viewPublicProjectFolder} />
+            </Button>
+          )}
+        </TopContainer>
+        <TabbedResource {...tabbedProps}>
+          <RouterOutlet />
+        </TabbedResource>
+      </>
+    );
+  }
+);
 
 const AdminProjectFolderEditionWithHoCs = injectIntl(AdminProjectFolderEdition);
 
 const Data = adopt<DataProps, InputProps & WithRouterProps>({
+  authUser: <GetAuthUser />,
   projectFolder: ({ params, render }) => (
     <GetProjectFolder projectFolderId={params.projectFolderId}>
       {render}
