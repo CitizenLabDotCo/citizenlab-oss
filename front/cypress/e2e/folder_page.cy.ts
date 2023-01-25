@@ -49,7 +49,7 @@ describe('Project selection page', () => {
   beforeEach(() => {
     cy.visit(`/folders/${folderSlug}`);
     cy.get('#e2e-folder-page');
-    cy.acceptCookies();
+
     cy.wait(500);
   });
 

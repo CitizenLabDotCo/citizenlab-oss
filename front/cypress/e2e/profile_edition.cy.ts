@@ -15,7 +15,6 @@ describe('profile edition', () => {
   beforeEach(() => {
     cy.setLoginCookie(email, password);
     cy.visit('/profile/edit');
-    cy.acceptCookies();
   });
   it('lets user edit their profile', () => {
     cy.intercept(`**/users/${userId}`).as('saveUser');

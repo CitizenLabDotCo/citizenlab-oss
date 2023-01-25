@@ -49,7 +49,6 @@ describe('Admin: update Hero Banner content', () => {
 
   it('displays hero banner settings on the landing page correctly', () => {
     cy.visit('/');
-    cy.acceptCookies();
 
     // main page should be full width layout when logged out
     cy.get('[data-cy=e2e-full-width-layout-header-image-overlay]').should(
@@ -176,7 +175,6 @@ describe('Admin: update Hero Banner content', () => {
     // log in as admin and reload page
     cy.setLoginCookie('admin@citizenlab.co', 'democracy2.0');
     cy.reload();
-    cy.acceptCookies();
 
     // go to page with homepage settings toggles
     cy.visit('/admin/pages-menu/');

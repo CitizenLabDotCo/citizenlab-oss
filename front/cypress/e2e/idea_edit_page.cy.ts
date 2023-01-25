@@ -59,7 +59,6 @@ describe('Idea edit page', () => {
 
     // go to form
     cy.visit(`/ideas/edit/${ideaId}`);
-    cy.acceptCookies();
 
     cy.get('#e2e-idea-edit-page');
     cy.get('#idea-form', { timeout: 100000 });

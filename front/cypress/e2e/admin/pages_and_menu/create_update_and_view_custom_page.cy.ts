@@ -20,7 +20,6 @@ describe('Admin: create, update, and view custom page', () => {
     // log in as admin, visit the pages and menu section in admin
     cy.setAdminLoginCookie();
     cy.visit('/admin/pages-menu/');
-    cy.acceptCookies();
 
     // go to custom page creation form
     cy.get('#create-custom-page').click();
