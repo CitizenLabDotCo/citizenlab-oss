@@ -9,7 +9,7 @@ end
 
 # 'mail' is not a direct requirement, but we need to install the pre-release version as
 # a temporary fix. See: https://github.com/mikel/mail/issues/1550
-gem "mail", "~>2.8.1.rc2"
+gem 'mail', '~>2.8.1.rc2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.7.1'
