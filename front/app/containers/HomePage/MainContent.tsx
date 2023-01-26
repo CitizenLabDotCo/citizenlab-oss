@@ -34,7 +34,7 @@ const StyledInitiativesCTABox = styled(InitiativesCTABox)`
 `;
 
 const MainContent = () => {
-  const postingPermission = useInitiativesPermissions('posting_initiative');
+  const postingPermission = useInitiativesPermissions();
   const postingProposalsEnabled = !!postingPermission?.enabled;
 
   return (

@@ -18,9 +18,11 @@ interface Props {
 }
 
 const InitiativeButton = ({ lat, lng, location, buttonStyle }: Props) => {
-  const { disabledReason, action, enabled } = useInitiativesPermissions(
-    'posting_initiative'
-  ) || { disabledReason: null, action: null, enabled: null };
+  const { disabledReason, action, enabled } = useInitiativesPermissions() || {
+    disabledReason: null,
+    action: null,
+    enabled: null,
+  };
 
   const redirectToInitiativeForm = () => {
     trackEventByName('redirected to initiatives form');

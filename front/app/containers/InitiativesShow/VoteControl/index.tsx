@@ -122,7 +122,6 @@ class VoteControl extends PureComponent<Props, State> {
   handleOnvote = () => {
     const { votingPermission } = this.props;
     const requiredAction = votingPermission?.action;
-    console.log(votingPermission);
     switch (requiredAction) {
       case 'sign_in_up':
         trackEventByName(
