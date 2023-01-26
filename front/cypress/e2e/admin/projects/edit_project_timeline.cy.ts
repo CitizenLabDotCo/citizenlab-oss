@@ -62,7 +62,6 @@ describe('Project timeline page', () => {
   it('in-platform survey method is disabled when trying to switch method of existing phase', () => {
     // Navigate to the timeline page
     cy.visit(`/admin/projects/${projectId}/timeline`);
-    cy.acceptCookies();
 
     // Check to see that the first phase is listed
     cy.get(`[data-testid="${`e2e-phase-${firstPhaseId}`}"]`).should('exist');
@@ -83,7 +82,6 @@ describe('Project timeline page', () => {
   it('shows a modal for user to confirm deleting a phase and then deletes the phase on confirmation', () => {
     // Navigate to the timeline page
     cy.visit(`/admin/projects/${projectId}/timeline`);
-    cy.acceptCookies();
 
     // Check to see that the first phase is listed
     cy.get(`[data-testid="${`e2e-phase-${firstPhaseId}`}"]`).should('exist');

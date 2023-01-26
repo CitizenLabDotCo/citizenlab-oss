@@ -14,7 +14,6 @@ describe('Idea new page', () => {
     cy.setLoginCookie(email, password);
     cy.visit('/projects/an-idea-bring-it-to-your-council/ideas/new');
     cy.get('#idea-form');
-    cy.acceptCookies();
   });
 
   it('shows an error when no title is provided', () => {

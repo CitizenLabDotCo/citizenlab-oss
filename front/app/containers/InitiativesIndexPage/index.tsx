@@ -74,7 +74,7 @@ const Padding = styled.div`
 `;
 
 const InitiativeIndexPage = () => {
-  const initiativePermissions = useInitiativesPermissions('posting_initiative');
+  const initiativePermissions = useInitiativesPermissions();
   const initiativesEnabled = useFeatureFlag({ name: 'initiatives' });
 
   if (!initiativesEnabled) {

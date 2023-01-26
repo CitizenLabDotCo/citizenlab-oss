@@ -155,7 +155,7 @@ describe('New timeline project with active ideation phase', () => {
   it('redirects to the idea creation form when pressing the post-your-idea button when logged in', () => {
     cy.setLoginCookie(email, password);
     cy.visit(`/projects/${projectTitle}`);
-    cy.acceptCookies();
+
     cy.get('#project-ideabutton').should('be.visible');
     cy.get('#project-ideabutton').click();
     cy.wait(4000);

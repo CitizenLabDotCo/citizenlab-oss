@@ -14,7 +14,6 @@ describe('Initiative new page', () => {
     cy.setLoginCookie(email, password);
     cy.visit('/initiatives/new');
     cy.get('#initiative-form');
-    cy.acceptCookies();
   });
 
   it('shows an error when no title is provided', () => {

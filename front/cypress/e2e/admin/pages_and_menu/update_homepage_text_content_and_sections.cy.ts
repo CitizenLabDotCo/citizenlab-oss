@@ -27,7 +27,6 @@ describe('Admin: update text content and sections', () => {
 
     // go to admin page
     cy.visit('/admin/pages-menu/');
-    cy.acceptCookies();
 
     // go to page with homepage settings toggles
     cy.get('[data-cy="e2e-navbar-item-edit-button"]').first().click();
