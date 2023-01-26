@@ -184,6 +184,10 @@ AppConfiguration.create!(
     project_management: {
       allowed: true,
       enabled: true
+    },
+    advanced_custom_pages: {
+      allowed: true,
+      enabled: true
     }
   })
 )
