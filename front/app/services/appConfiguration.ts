@@ -65,14 +65,6 @@ export interface IAppConfigurationSettings {
     allowed: boolean;
     enabled: boolean;
   };
-  demographic_fields?: {
-    allowed: boolean;
-    enabled: boolean;
-    gender: boolean;
-    birthyear: boolean;
-    domicile: boolean;
-    education: boolean;
-  };
   password_login?: {
     allowed: boolean;
     enabled: boolean;
@@ -97,9 +89,7 @@ export interface IAppConfigurationSettings {
     enabled: boolean;
     url?: string;
   };
-  manual_project_sorting?: AppConfigurationFeature;
   pages?: AppConfigurationFeature;
-  project_reports?: AppConfigurationFeature;
   private_projects?: AppConfigurationFeature;
   maps?: AppConfigurationMapSettings;
   participatory_budgeting?: AppConfigurationFeature;
@@ -135,9 +125,6 @@ export interface IAppConfigurationSettings {
   project_management?: AppConfigurationFeature;
   idea_author_change?: AppConfigurationFeature;
   idea_custom_copy?: AppConfigurationFeature;
-  satismeter?: AppConfigurationFeature & {
-    write_key: string;
-  };
   redirects?: AppConfigurationFeature & {
     rules: {
       path: string;

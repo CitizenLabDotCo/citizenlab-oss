@@ -112,11 +112,6 @@ export interface IInitiativeLinks {
   last: string;
 }
 
-export type InitiativeDisabledReason =
-  | 'not_permitted'
-  | 'not_verified'
-  | 'not_signed_in';
-
 export function initiativeByIdStream(initiativeId: string) {
   return streams.get<IInitiative>({
     apiEndpoint: `${API_PATH}/initiatives/${initiativeId}`,
@@ -225,17 +220,4 @@ export interface IInitiativesFilterCounts {
     [key: string]: number;
   };
   total: number;
-}
-
-export type IInitiativeActionDescriptors = {
-  [key in IInitiativeAction]: {
-    enabled: boolean;
-    disabled_reason: InitiativeDisabledReason | null;
-  };
-};
-
-export function getInitiativeActionDescriptors() {
-  return streams.get<IInitiativeActionDescriptors>({
-    apiEndpoint: `${API_PATH}/action_descriptors/initiatives`,
-  });
 }
