@@ -226,10 +226,3 @@ export interface IInitiativesFilterCounts {
   };
   total: number;
 }
-
-export type IInitiativeActionDescriptors = {
-  [key in IInitiativeAction]: {
-    enabled: boolean;
-    disabled_reason: InitiativeDisabledReason | null;
-  };
-};
