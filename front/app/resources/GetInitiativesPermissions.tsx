@@ -18,8 +18,8 @@ export type GetInitiativesPermissionsChildProps =
   | null
   | undefined;
 
-const GetInitiativesPermissions = ({ children, action }: Props) => {
-  const initiativesPermissions = useInitiativesPermissions(action);
+const GetInitiativesPermissions = ({ children }: Props) => {
+  const initiativesPermissions = useInitiativesPermissions();
   return (children as children)(initiativesPermissions);
 };
 
