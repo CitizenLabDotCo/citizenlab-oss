@@ -112,11 +112,6 @@ export interface IInitiativeLinks {
   last: string;
 }
 
-export type InitiativeDisabledReason =
-  | 'not_permitted'
-  | 'not_verified'
-  | 'not_signed_in';
-
 export function initiativeByIdStream(initiativeId: string) {
   return streams.get<IInitiative>({
     apiEndpoint: `${API_PATH}/initiatives/${initiativeId}`,
