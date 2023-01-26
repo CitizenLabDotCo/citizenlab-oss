@@ -233,9 +233,3 @@ export type IInitiativeActionDescriptors = {
     disabled_reason: InitiativeDisabledReason | null;
   };
 };
-
-export function getInitiativeActionDescriptors() {
-  return streams.get<IInitiativeActionDescriptors>({
-    apiEndpoint: `${API_PATH}/action_descriptors/initiatives`,
-  });
-}

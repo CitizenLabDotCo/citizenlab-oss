@@ -188,11 +188,15 @@ AppConfiguration.create!(
     advanced_custom_pages: {
       allowed: true,
       enabled: true
-    },    
-    advanced_custom_pages: {
-        allowed: true,
-        enabled: true
-      }
+    },
+    custom_accessibility_statement_link: {
+      allowed: true,
+      enabled: true
+    },
+    disable_user_bios: {
+      allowed: true,
+      enabled: true
+    }
   })
 )
 
