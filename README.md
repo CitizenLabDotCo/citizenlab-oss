@@ -9,7 +9,7 @@ CitizenLab is a **digital democracy platform** that facilitates community partic
 
 CitizenLab adopts a so-called **[open-core model](https://en.wikipedia.org/wiki/Open-core_model)**, which means that there are two product editions available:
 
-- CitizenLab Free Edition, including all core functionalities, freely available under the AGPLv3 license. This edition is designed for small organisations running their next engagement project.
+- CitizenLab Free Edition, contained in this repository. It includes all core functionalities, freely available under the AGPLv3 license. This edition is designed for small organisations running their next engagement project.
 - CitizenLab Commercial Edition, including [extra features](https://www.citizenlab.co/plans) described under Standard/Premium, available by the paid commercial license. This edition is your best option if you plan to run many engagement projects, in order to have access to more back-office functionalities and manage your platform efficiently.
 
 This code repository is organised and configured to get you started on the Free Edition of the CitizenLab software. To use the Commercial Edition or get professional support, consider [becoming a CitizenLab client](https://www.citizenlab.co/plans).
@@ -42,4 +42,4 @@ You can also contribute [translations](https://developers.citizenlab.co/guide-co
 
 ## License
 
-Source code in this repository is covered by the GNU Affero General Public License v3 License.
+Source code in this repository is covered by the GNU Affero General Public License v3.
