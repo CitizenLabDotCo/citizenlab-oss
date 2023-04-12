@@ -480,13 +480,13 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.10-aarch64-linux)
+    nokogiri (1.14.3-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.13.10-arm64-darwin)
+    nokogiri (1.14.3-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.10-x86_64-darwin)
+    nokogiri (1.14.3-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.10-x86_64-linux)
+    nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     oauth2 (1.4.9)
       faraday (>= 0.17.3, < 3.0)
@@ -854,7 +854,7 @@ DEPENDENCIES
   mailgun-ruby (~> 1.2.0)
   mini_magick (~> 4.9)
   mjml-rails (~> 4.4)
-  nokogiri (~> 1.13.10)
+  nokogiri (~> 1.14.3)
   okcomputer
   omniauth (~> 1.9.1)
   omniauth-azure-activedirectory!
