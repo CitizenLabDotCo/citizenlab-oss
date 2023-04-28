@@ -357,7 +357,7 @@ jobs:
       - run: git config --global user.name "CircleCI"
       - add_ssh_keys:
           fingerprints:
-            - "b8:7b:38:ee:7d:8c:8c:e0:84:74:88:b6:98:2d:0f:f6"
+            - "af:16:ce:9e:89:10:35:79:ea:1c:83:9d:0a:0e:08:ed"
       - run: git diff --quiet app/translations && git diff --staged --quiet app/translations || git commit -m "Translations updated by CI (extract-intl)"
       - run: git push origin $CIRCLE_BRANCH
 
