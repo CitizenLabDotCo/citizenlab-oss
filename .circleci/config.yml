@@ -357,7 +357,7 @@ jobs:
       - run: git config --global user.name "CircleCI"
       - add_ssh_keys:
           fingerprints:
-            - "b8:7b:38:ee:7d:8c:8c:e0:84:74:88:b6:98:2d:0f:f6"
+            - "af:16:ce:9e:89:10:35:79:ea:1c:83:9d:0a:0e:08:ed"
       - run: git diff --quiet app/translations && git diff --staged --quiet app/translations || git commit -m "Translations updated by CI (extract-intl)"
       - run: git push origin $CIRCLE_BRANCH
 
@@ -626,26 +626,3 @@ workflows:
           context:
             - docker-hub-access
             - lastpass
-
-  nightly-e2e-tests:
-    triggers:
-      - schedule:
-          cron: "0 2,14 * * 1-5" # https://crontab.guru/
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - e2e-tests:
-          context:
-            - docker-hub-access
-            - slack-dev-notifications-e2e
-            - lastpass
-          post-steps:
-            - slack/notify:
-                event: pass
-                template: basic_success_1
-            - slack/notify:
-                event: fail
-                mentions: ":boom: FAILURE: Some tests failed."
-                template: basic_fail_1

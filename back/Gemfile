@@ -9,10 +9,10 @@ end
 
 # 'mail' is not a direct requirement, but we need to install the pre-release version as
 # a temporary fix. See: https://github.com/mikel/mail/issues/1550
-gem "mail", "~>2.8.1.rc2"
+gem 'mail', '~>2.8.1.rc2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.7.1'
+gem 'rails', '~> 6.1.7.3'
 # Use postgresql as the database for Active Record
 gem 'pg' # , '~> 0.18'
 # Use Puma as the app server
@@ -127,7 +127,7 @@ gem 'premailer-rails', '~> 1.10.3'
 gem 'rest-client'
 gem 'rgeo-geojson'
 gem 'rubyzip', '~> 1.3.0'
-gem 'nokogiri', '~> 1.13.10'
+gem 'nokogiri', '~> 1.14.3'
 
 gem 'okcomputer'
 gem 'omniauth', '~> 1.9.1'

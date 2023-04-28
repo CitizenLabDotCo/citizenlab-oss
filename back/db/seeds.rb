@@ -190,8 +190,8 @@ AppConfiguration.create!(
       enabled: true
     },
     custom_accessibility_statement_link: {
-      allowed: true,
-      enabled: true
+      allowed: false,
+      enabled: false
     },
     disable_user_bios: {
       allowed: true,
