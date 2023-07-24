@@ -61,6 +61,7 @@
     "@tippyjs/react": "4.2.6",
     "ajv": "^8.9.0",
     "bowser": "1.x",
+    "browserslist": "^4.21.9",
     "canvas-to-blob": "^1.0.0",
     "canvg": "^4.0.0",
     "clipboard-polyfill": "3.0.3",
