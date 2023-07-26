@@ -1,4 +1,3 @@
-
 # CitizenLab
 
 ![CitizenLab](https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/citizenlab_logo_small.png)
@@ -21,7 +20,6 @@ If you'd like to test out the functionalities before setting up your own instanc
 
 ![GIF of the CitizenLab platform](https://cl2-seed-and-template-assets.s3.eu-central-1.amazonaws.com/images/example_platform_small.gif)
 
-
 ## Getting started
 
 Check out the **[Development Portal](https://developers.citizenlab.co)** to get started:
@@ -43,3 +41,7 @@ You can also contribute [translations](https://developers.citizenlab.co/guide-co
 ## License
 
 Source code in this repository is covered by the GNU Affero General Public License v3.
+
+# Research Contributions
+
+Modifications have been made to faciliate changes in the current on-going community-conntributions-board
