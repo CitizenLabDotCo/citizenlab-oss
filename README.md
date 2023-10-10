@@ -26,8 +26,8 @@ If you'd like to test out the functionalities before setting up your own instanc
 
 Check out the **[Development Portal](https://developers.citizenlab.co)** to get started:
 
-- [Deploying your own platform](https://developers.citizenlab.co/start-deployment)
-- [Setting up your development environment](https://developers.citizenlab.co/start-dev-environment)
+- [Deploying your own platform](https://developers.citizenlab.co/guides/start-deployment)
+- [Setting up your development environment](https://developers.citizenlab.co/guides/start-dev-environment)
 
 For more information about CitizenLab, consult our **[website](https://www.citizenlab.co)**.
 
