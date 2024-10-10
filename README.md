@@ -12,7 +12,7 @@ Go Vocal adopts a so-called **[open-core model](https://en.wikipedia.org/wiki/Op
 - Go Vocal Free Edition, contained in this repository. It includes all core functionalities, freely available under the AGPLv3 license. This edition is designed for small organisations running their next engagement project.
 - Go Vocal Commercial Edition, including [extra features](https://www.govocal.com/plans) described under Standard/Premium, available by the paid commercial license. This edition is your best option if you plan to run many engagement projects, in order to have access to more back-office functionalities and manage your platform efficiently.
 
-This code repository is organised and configured to get you started on the Free Edition of the CitizenLab software. To use the Commercial Edition or get professional support, consider [becoming a CitizenLab client](https://www.govocal.com/plans).
+This code repository is organised and configured to get you started on the Free Edition of the Go Vocal software. To use the Commercial Edition or get professional support, consider [becoming a Go Vocal client](https://www.govocal.com/plans).
 Looking for the source code of our source-available commercial edition? You can find it [here](https://github.com/CitizenLabDotCo/citizenlab).
 
 ## Demo platform
